@@ -1,1 +1,72 @@
-1
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>篠ノ井乗務区 - Beta Site</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="auth.js" defer></script>
+    <style>
+        /* パスワード入力前の画面隠し用マスク */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #f4f6f9; z-index: 9999; display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay"></div>
+
+    <div class="clock-container">
+        <div class="clock-face">
+            <div class="clock-hand hour-hand" id="hr"></div>
+            <div class="clock-hand minute-hand" id="min"></div>
+            <div class="clock-hand second-hand" id="sec"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>篠ノ井乗務区 Beta</h1>
+        <p class="subtitle">Railway & Technology / 実験用特設ページ</p>
+        
+        <div class="beta-box">
+            <h3>現在の実験内容</h3>
+            <ul>
+                <li>JavaScriptによるセキュアなパスワード認証</li>
+                <li>PC環境限定のアナログ時計（CSS/JS連動ギミック）</li>
+                <li>完全独立型エラーページのルーティング検証</li>
+            </ul>
+        </div>
+        
+        <hr>
+        
+        <ul class="nav-links">
+            <li><a href="terms.html">利用規約</a></li>
+            <li><a href="policy.html">プライバシーポリシー</a></li>
+        </ul>
+    </div>
+
+    <script>
+        const hr = document.querySelector("#hr");
+        const min = document.querySelector("#min");
+        const sec = document.querySelector("#sec");
+
+        function updateClock() {
+            const now = new Date();
+            const iSec = now.getSeconds();
+            const iMin = now.getMinutes();
+            const iHr = now.getHours();
+
+            const secDeg = (iSec / 60) * 360;
+            const minDeg = (iMin / 60) * 360 + (iSec / 60) * 6;
+            const hrDeg = (iHr / 12) * 360 + (iMin / 60) * 30;
+
+            sec.style.transform = `rotate(${secDeg}deg)`;
+            min.style.transform = `rotate(${minDeg}deg)`;
+            hr.style.transform = `rotate(${hrDeg}deg)`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
