@@ -1,4 +1,4 @@
-　// 認証管理システム
+　　// 認証管理システム
 async function validateAccess() {
     // 現在のファイル名を取得
     const currentPage = window.location.pathname.split("/").pop();
