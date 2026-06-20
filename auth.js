@@ -49,3 +49,4 @@ async function validateAccess() {
 
 // 起動時に実行
 document.addEventListener('DOMContentLoaded', validateAccess);
+
