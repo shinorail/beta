@@ -1,53 +1,56 @@
-　　// 認証管理システム
+// 認証管理システム
 async function validateAccess() {
-    // 現在のファイル名を取得
     const currentPage = window.location.pathname.split("/").pop();
 
-    // すでにログイン済みの合図がある場合 
+    // すでにログイン済み
     if (sessionStorage.getItem("beta_access") === "granted") {
-        const overlay = document.getElementById("loading-overlay");
-        if (overlay) overlay.style.display = "none";
+        hideOverlay();
         return;
     }
 
-    // トップページ（index.html または ルートパス）での処理
-    if (currentPage === "index.html" || currentPage === "") {
-        const input = prompt("パスワードを入力してください（ベータサイト用）:");
-        if (!input) {
-            window.location.href = "403.html";
-            return;
-        }
+    // GitHub Pages の index.html は "" または "index.html" になる
+    const isIndex = (currentPage === "" || currentPage === "index.html");
 
-        // 入力文字の暗号化計算
+    if (isIndex) {
+        const input = prompt("パスワードを入力してください（ベータサイト用）:");
+        if (!input) return redirect403();
+
+        // SHA-256 ハッシュ化
         const buffer = new TextEncoder().encode(input);
         const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         const hexResult = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-        // 照合用暗号キー
+        // 照合キー
         const key = "7c65da985392bda40656708453488880608fa8fa7924d5598687ba4efdc84360";
 
         if (hexResult !== key) {
-            window.location.href = "403.html";
-        } else {
-            sessionStorage.setItem("beta_access", "granted");
-            const overlay = document.getElementById("loading-overlay");
-            if (overlay) overlay.style.display = "none";
+            return redirect403();
         }
-    } else {
-        // index.html 以外のページ（規約、ポリシー、404など）に未ログインで直接アクセスしてきた場合
-        // 例外として403ページ自体は無限ループを防ぐため除外
-        if (currentPage !== "403.html") {
-            window.location.href = "403.html";
-        } else {
-            // 403ページ自体のマスクを外す
-            const overlay = document.getElementById("loading-overlay");
-            if (overlay) overlay.style.display = "none";
-        }
+
+        // 認証成功
+        sessionStorage.setItem("beta_access", "granted");
+        hideOverlay();
+        return;
     }
+
+    // index 以外のページに未ログインで来た場合
+    if (currentPage !== "403.html") {
+        return redirect403();
+    }
+
+    // 403 ページはオーバーレイを外す
+    hideOverlay();
 }
 
-// 起動時に実行
+// 共通関数
+function redirect403() {
+    window.location.href = "/403.html"; // GitHub Pages では絶対パス推奨
+}
+
+function hideOverlay() {
+    const overlay = document.getElementById("loading-overlay");
+    if (overlay) overlay.style.display = "none";
+}
+
 document.addEventListener('DOMContentLoaded', validateAccess);
-
-
