@@ -3,7 +3,7 @@ async function validateAccess() {
     // 現在のファイル名を取得
     const currentPage = window.location.pathname.split("/").pop();
 
-    // すでにログイン済みの合図がある場合
+    // すでにログイン済みの合図がある場合 
     if (sessionStorage.getItem("beta_access") === "granted") {
         const overlay = document.getElementById("loading-overlay");
         if (overlay) overlay.style.display = "none";
