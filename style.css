@@ -7,9 +7,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;　　　　　
+    min-height: 80vh;
 }
-　
+
 .container {
     max-width: 600px;
     width: 100%;
@@ -55,3 +55,4 @@ a:hover { text-decoration: underline; }
     .minute-hand { width: 3px; height: 35px; margin-left: -1.5px; }
     .second-hand { width: 1.5px; height: 40px; margin-left: -0.75px; background: #dc3545; }
 }
+
